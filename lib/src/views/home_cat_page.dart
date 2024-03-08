@@ -1,5 +1,6 @@
 import 'package:cats_app/src/models/cat.dart';
 import 'package:cats_app/src/viewModels/cat_view_model.dart';
+import 'package:cats_app/src/views/item_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,41 +51,63 @@ class _HomeCatPageState extends State<HomeCatPage> {
   Widget _itemCard(BuildContext context, Cat item) {
     return Card(
       margin: const EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              item.name ?? '',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
-              ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ItemDetail(itemCat: item),
             ),
-            SizedBox(height: 8.0),
-            Center(
-              child: SizedBox(
-                width: 150.0,
-                height: 150.0,
-                child: Image.network(
-                  "https://cdn2.thecatapi.com/images/${item.referenceImageId}.jpg",
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Text("No imagen"),
-                  fit: BoxFit.cover,
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    item.name ?? '',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                   Text(
+                    "Mas...",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.0),
+              Center(
+                child: SizedBox(
+                  width: 150.0,
+                  height: 150.0,
+                  child: Image.network(
+                    "https://cdn2.thecatapi.com/images/${item.referenceImageId}.jpg",
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Text("No imagen"),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              'País: ${item.origin}',
-              style: const TextStyle(fontSize: 14.0),
-            ),
-            Text(
-              'Inteligencia: ${item.temperament}',
-              style: const TextStyle(fontSize: 14.0),
-            ),
-          ],
+              const SizedBox(height: 8.0),
+              Text(
+                'País: ${item.origin}',
+                style: const TextStyle(fontSize: 14.0),
+              ),
+              Text(
+                'Inteligencia: ${item.temperament}',
+                style: const TextStyle(fontSize: 14.0),
+              ),
+            ],
+          ),
         ),
       ),
     );
