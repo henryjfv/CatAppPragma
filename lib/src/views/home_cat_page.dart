@@ -32,6 +32,7 @@ class _HomeCatPageState extends State<HomeCatPage> {
   }
 
   void _filterList() {
+    filteredList = [];
     setState(() {
       if (_textController.text.isEmpty) {
         filteredList.clear();
@@ -103,6 +104,8 @@ class _HomeCatPageState extends State<HomeCatPage> {
             );
           } else {
             originalList = state.items.toList();
+
+            final list = filteredList.length == 0 ? originalList : filteredList;
             return Column(
               children: [
                 Padding(
@@ -118,9 +121,9 @@ class _HomeCatPageState extends State<HomeCatPage> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: filteredList.length,
+                    itemCount: list.length,
                     itemBuilder: (context, index) {
-                      final item = filteredList[index];
+                      final item = list[index];
                       return _itemCard(context, item);
                     },
                   ),

@@ -17,17 +17,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Breeds Cat App',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: BlocProvider<CatViewModel>(
-          create: (context) =>
-              CatViewModel(), // No se necesitan argumentos aquí
-          child: const MaterialApp(
-            home: HomeCatPage(),
-          ),
-        ));
+      title: 'Breeds Cat App',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: BlocProvider<CatViewModel>(
+        create: (context) => CatViewModel(), // No se necesitan argumentos aquí
+        child: const HomeCatPage(),
+      ),
+    );
   }
 }
