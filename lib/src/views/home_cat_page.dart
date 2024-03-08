@@ -1,6 +1,7 @@
 import 'package:cats_app/src/models/cat.dart';
 import 'package:cats_app/src/viewModels/cat_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeCatPage extends StatefulWidget {
@@ -11,10 +12,38 @@ class HomeCatPage extends StatefulWidget {
 }
 
 class _HomeCatPageState extends State<HomeCatPage> {
+  final TextEditingController _textController = TextEditingController();
+
+  List<Cat> originalList = [];
+
+  List<Cat> filteredList = [];
+
   @override
   void initState() {
     context.read<CatViewModel>().add(LoadItemsEvent());
     super.initState();
+    _textController.addListener(_filterList);
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  void _filterList() {
+    setState(() {
+      if (_textController.text.isEmpty) {
+        filteredList.clear();
+        filteredList.addAll(originalList);
+      } else {
+        filteredList = originalList
+            .where((element) => element.name!
+                .toLowerCase()
+                .contains(_textController.text.toLowerCase()))
+            .toList();
+      }
+    });
   }
 
   Widget _itemCard(BuildContext context, Cat item) {
@@ -40,7 +69,7 @@ class _HomeCatPageState extends State<HomeCatPage> {
                 child: Image.network(
                   "https://cdn2.thecatapi.com/images/${item.referenceImageId}.jpg",
                   errorBuilder: (context, error, stackTrace) =>
-                      const Text("No imagen "),
+                      const Text("No imagen"),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -73,12 +102,30 @@ class _HomeCatPageState extends State<HomeCatPage> {
               child: CircularProgressIndicator(),
             );
           } else {
-            return ListView.builder(
-              itemCount: state.items.length,
-              itemBuilder: (context, index) {
-                final item = state.items[index];
-                return _itemCard(context, item);
-              },
+            originalList = state.items.toList();
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: _textController,
+                    decoration: const InputDecoration(
+                      labelText: 'Search',
+                      hintText: 'Type to filter',
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: filteredList.length,
+                    itemBuilder: (context, index) {
+                      final item = filteredList[index];
+                      return _itemCard(context, item);
+                    },
+                  ),
+                ),
+              ],
             );
           }
         },
