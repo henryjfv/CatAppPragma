@@ -2,8 +2,10 @@
 
 Pragma test
 
-## Getting Started
+# What is expected to be found?
 
+## Getting Started
+https://github.com/henryjfv/CatAppPragma/assets/14287571/c2a3a731-2035-4532-9eea-878dadb87528
 
 1. First add an .env file to the root of the project and write the environment variables for the operation of the app
     ````
